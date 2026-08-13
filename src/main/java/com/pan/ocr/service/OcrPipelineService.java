@@ -9,7 +9,8 @@ import com.google.zxing.common.HybridBinarizer;
 import com.pan.ocr.dto.PanOcrRequest;
 import com.pan.ocr.dto.PanOcrResponse;
 import com.pan.ocr.util.PiiMaskUtil;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -21,9 +22,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Slf4j
 @Service
 public class OcrPipelineService {
+
+    private static final Logger log = LoggerFactory.getLogger(OcrPipelineService.class);
 
     private static final Pattern PAN_PATTERN = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]");
     private static final Pattern AADHAAR_PATTERN = Pattern.compile("\\b\\d{4}\\s?\\d{4}\\s?\\d{4}\\b");
@@ -144,26 +146,27 @@ public class OcrPipelineService {
 
         log.info("Successfully processed PAN: {} for request: {}", PiiMaskUtil.maskPan(correctedPan), requestId);
 
-        return PanOcrResponse.builder()
-                .success(true)
-                .source("OCR")
-                .panNumber(correctedPan)
-                .name(name != null ? name : "ANAND KUMAR")
-                .fatherName(fatherName != null ? fatherName : "SURESH KUMAR")
-                .dob(dob != null ? dob : "15081995")
-                .confidence(confidence)
-                .qualityMetrics(PanOcrResponse.QualityMetrics.builder()
-                        .qualityPercentage(96.5)
-                        .blurScore("Laplacian Variance Passed (" + (int) blurVariance + ")")
-                        .exposureScore("Balanced Brightness (" + (int) brightness + ")")
-                        .resolution(width + "x" + height + "px")
-                        .build())
-                .correctionMetrics(PanOcrResponse.CorrectionMetrics.builder()
-                        .correctionPercentage(100.0)
-                        .swapsApplied(swapsApplied)
-                        .build())
-                .requestId(requestId)
-                .build();
+        PanOcrResponse resp = new PanOcrResponse();
+        resp.setSuccess(true);
+        resp.setSource("OCR");
+        resp.setPanNumber(correctedPan);
+        resp.setName(name != null ? name : "ANAND KUMAR");
+        resp.setFatherName(fatherName != null ? fatherName : "SURESH KUMAR");
+        resp.setDob(dob != null ? dob : "15081995");
+        resp.setConfidence(confidence);
+        resp.setQualityMetrics(new PanOcrResponse.QualityMetrics(
+                96.5,
+                "Laplacian Variance Passed (" + (int) blurVariance + ")",
+                "Balanced Brightness (" + (int) brightness + ")",
+                width + "x" + height + "px"
+        ));
+        resp.setCorrectionMetrics(new PanOcrResponse.CorrectionMetrics(
+                100.0,
+                swapsApplied
+        ));
+        resp.setRequestId(requestId);
+
+        return resp;
     }
 
     private BufferedImage downscaleIfNeeded(BufferedImage src) {
@@ -202,16 +205,16 @@ public class OcrPipelineService {
                 Matcher m = PAN_PATTERN.matcher(text);
                 if (m.find()) {
                     String pan = m.group();
-                    return PanOcrResponse.builder()
-                            .success(true)
-                            .source("QR")
-                            .panNumber(pan)
-                            .name("ANAND KUMAR")
-                            .fatherName("SURESH KUMAR")
-                            .dob("15081995")
-                            .confidence(Map.of("panNumber", 0.999, "name", 0.986, "fatherName", 0.979, "dob", 0.992))
-                            .requestId(requestId)
-                            .build();
+                    PanOcrResponse resp = new PanOcrResponse();
+                    resp.setSuccess(true);
+                    resp.setSource("QR");
+                    resp.setPanNumber(pan);
+                    resp.setName("ANAND KUMAR");
+                    resp.setFatherName("SURESH KUMAR");
+                    resp.setDob("15081995");
+                    resp.setConfidence(Map.of("panNumber", 0.999, "name", 0.986, "fatherName", 0.979, "dob", 0.992));
+                    resp.setRequestId(requestId);
+                    return resp;
                 }
             }
         } catch (Exception ignored) {

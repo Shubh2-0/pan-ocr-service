@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <djl.version>0.31.0</djl.version>
+        <djl.version>0.30.0</djl.version>
         <zxing.version>3.5.3</zxing.version>
     </properties>
 
@@ -38,20 +38,20 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- DJL (Deep Java Library) - Pinned Stable LTS Native Binaries -->
+        <!-- DJL (Deep Java Library) Core API & PyTorch Engine -->
         <dependency>
             <groupId>ai.djl</groupId>
             <artifactId>api</artifactId>
             <version>${djl.version}</version>
         </dependency>
         <dependency>
-            <groupId>ai.djl.paddlepaddle</groupId>
-            <artifactId>paddlepaddle-engine</artifactId>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-engine</artifactId>
             <version>${djl.version}</version>
         </dependency>
         <dependency>
-            <groupId>ai.djl.official-models</groupId>
-            <artifactId>cv-models</artifactId>
+            <groupId>ai.djl.pytorch</groupId>
+            <artifactId>pytorch-model-zoo</artifactId>
             <version>${djl.version}</version>
         </dependency>
 

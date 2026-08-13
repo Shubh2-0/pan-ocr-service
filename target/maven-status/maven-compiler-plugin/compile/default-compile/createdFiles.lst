@@ -1,0 +1,8 @@
+com\pan\ocr\controller\OcrController.class
+com\pan\ocr\util\PiiMaskUtil.class
+com\pan\ocr\dto\PanOcrResponse$QualityMetrics.class
+com\pan\ocr\OcrApplication.class
+com\pan\ocr\service\OcrPipelineService.class
+com\pan\ocr\dto\PanOcrRequest.class
+com\pan\ocr\dto\PanOcrResponse$CorrectionMetrics.class
+com\pan\ocr\dto\PanOcrResponse.class
