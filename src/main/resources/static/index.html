@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAN OCR Service - Data Extraction Engine</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Navigation Navbar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-logo"><i class="fa-solid fa-id-card"></i></div>
+      <div class="brand-text">
+        <h1>PAN OCR Service</h1>
+        <span>In-House Data Extraction Engine v1.0</span>
+      </div>
+    </div>
+    <div class="nav-badges">
+      <div class="badge">
+        <span class="badge-dot dot-green"></span>
+        <span>Engine: DJL PaddleOCR</span>
+      </div>
+      <div class="badge">
+        <span class="badge-dot dot-purple"></span>
+        <span id="modeDisplay">Mode: Shadow / In-House</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="main-grid">
+      
+      <!-- Left Column: Input & Upload Controls -->
+      <section class="glass-card">
+        <h2 class="card-title">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          PAN Document Input
+        </h2>
+
+        <!-- Tab Selector: File Upload vs Base64 -->
+        <div class="tabs">
+          <button class="tab-btn active" id="tabUpload" onclick="switchTab('upload')">
+            <i class="fa-solid fa-image"></i> Upload File
+          </button>
+          <button class="tab-btn" id="tabBase64" onclick="switchTab('base64')">
+            <i class="fa-solid fa-code"></i> Paste Base64
+          </button>
+        </div>
+
+        <!-- Tab 1: Drag and Drop Area -->
+        <div id="uploadView">
+          <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-file-image dropzone-icon"></i>
+            <div class="dropzone-text">
+              <p>Drag & drop PAN card image here or <strong>Browse</strong></p>
+              <span>Supports JPG, PNG, WebP (Max 7MB • Min 600px width)</span>
+            </div>
+            <input type="file" id="fileInput" class="file-input" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect(event)">
+          </div>
+        </div>
+
+        <!-- Tab 2: Base64 Textarea Area -->
+        <div id="base64View" style="display: none;">
+          <div class="base64-container">
+            <textarea id="base64Input" class="base64-input" placeholder="Paste raw base64 string or data:image/jpeg;base64,... here..." oninput="handleBase64Input()"></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span id="charCount" style="font-size: 11px; color: var(--text-tertiary);">0 characters</span>
+              <button onclick="pasteBase64FromClipboard()" style="background: transparent; border: none; color: var(--primary-cyan); font-size: 12px; cursor: pointer;">
+                <i class="fa-solid fa-paste"></i> Paste from Clipboard
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preset Test Cards -->
+        <div class="preset-bar">
+          <span class="preset-label"><i class="fa-solid fa-vial"></i> Quick Test Presets:</span>
+          <button class="preset-chip" style="border-color: var(--primary-cyan); color: var(--primary-cyan);" onclick="loadPreset('user_real')">🌟 Shubham's Real PAN Card</button>
+          <button class="preset-chip" onclick="loadPreset('valid_new')">Valid PAN (Post-2018)</button>
+          <button class="preset-chip" onclick="loadPreset('blurry')">Blurry Card (Rejection)</button>
+          <button class="preset-chip" onclick="loadPreset('aadhaar')">Aadhaar Card (Rejection)</button>
+        </div>
+
+        <!-- Image Preview Box -->
+        <div style="margin-top: 20px;">
+          <label style="font-size: 12px; color: var(--text-secondary); font-weight: 500; display: block; margin-bottom: 6px;">Image Preview & Scan Region</label>
+          <div class="preview-container">
+            <div class="scanner-line" id="scannerLine"></div>
+            <img id="imagePreview" class="preview-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='220' viewBox='0 0 400 220'><rect width='100%' height='100%' fill='%230f1623'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%2364748b' font-family='sans-serif' font-size='14'>No PAN Image Selected</text></svg>" alt="Preview">
+          </div>
+        </div>
+
+        <!-- Process Button -->
+        <button id="processBtn" class="btn-action" onclick="runOcrExtraction()">
+          <i class="fa-solid fa-bolt"></i> Run Extraction Pipeline
+        </button>
+      </section>
+
+      <!-- Right Column: Analytics, Metrics & Extracted Results -->
+      <section class="glass-card">
+        <h2 class="card-title">
+          <i class="fa-solid fa-chart-pie"></i>
+          Extraction Metrics & Data Results
+        </h2>
+
+        <!-- Top 3 Percentage Gauges requested by User -->
+        <div class="metrics-grid">
+          <!-- 1. Image Quality Percentage -->
+          <div class="metric-card">
+            <div class="metric-header">Image Quality</div>
+            <div class="metric-val" id="metricQuality">--%</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill fill-cyan" id="fillQuality" style="width: 0%;"></div>
+            </div>
+            <div class="metric-subtext" id="subQuality">Blur & Exposure Variance</div>
+          </div>
+
+          <!-- 2. Fetch Extraction Percentage -->
+          <div class="metric-card">
+            <div class="metric-header">Fetch Confidence</div>
+            <div class="metric-val" id="metricFetch">--%</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill fill-emerald" id="fillFetch" style="width: 0%;"></div>
+            </div>
+            <div class="metric-subtext" id="subFetch">Overall Extraction Score</div>
+          </div>
+
+          <!-- 3. Character Correction Percentage -->
+          <div class="metric-card">
+            <div class="metric-header">Correction Accuracy</div>
+            <div class="metric-val" id="metricCorrection">--%</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill fill-purple" id="fillCorrection" style="width: 0%;"></div>
+            </div>
+            <div class="metric-subtext" id="subCorrection">Positional Swaps Applied</div>
+          </div>
+        </div>
+
+        <!-- Success Result Data Rows -->
+        <div id="resultsContainer" class="result-group">
+          <div style="text-align: center; padding: 40px 0; color: var(--text-tertiary);">
+            <i class="fa-solid fa-magnifying-glass" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
+            Run extraction pipeline to display parsed fields, confidence scores and positional corrections.
+          </div>
+        </div>
+
+        <!-- Rejection Banner (hidden by default) -->
+        <div id="rejectionBanner" class="rejection-banner" style="display: none;">
+          <i class="fa-solid fa-triangle-exclamation rejection-icon"></i>
+          <div class="rejection-text">
+            <h4 id="rejectionCode">REJECTED</h4>
+            <p id="rejectionMessage">The submitted image could not be processed.</p>
+          </div>
+        </div>
+
+        <!-- Raw JSON Inspector -->
+        <div style="margin-top: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label style="font-size: 12px; color: var(--text-secondary); font-weight: 500;"><i class="fa-solid fa-code"></i> Raw API Response Payload</label>
+            <button onclick="copyJsonResponse()" style="background: transparent; border: none; color: var(--primary-cyan); font-size: 11px; cursor: pointer;">
+              <i class="fa-solid fa-copy"></i> Copy JSON
+            </button>
+          </div>
+          <pre id="jsonViewer" class="json-viewer">// Pipeline output will appear here...</pre>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
