@@ -1,12 +1,26 @@
 # 💳 PanLens OCR - Painless In-House PAN Card Data Extraction Engine
 
+<p align="center">
+  <img src="docs/images/panlens-banner.png" alt="PanLens OCR Banner" width="100%" />
+</p>
+
 An intelligent, high-performance in-house microservice that reads customer-uploaded PAN card photos, scans QR codes or extracts text automatically and returns clean structured data (PAN Number, Full Name, Father's Name and DOB) with instant quality & accuracy scores.
 
-![Java 21](https://img.shields.io/badge/Java-21_LTS-orange?style=for-the-badge&logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.2-brightgreen?style=for-the-badge&logo=springboot)
-![DJL PaddleOCR](https://img.shields.io/badge/AI_Engine-DJL_PaddleOCR-blue?style=for-the-badge&logo=apache)
-![ZXing QR](https://img.shields.io/badge/QR_Scanner-ZXing_Pure_Java-yellow?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Apache_2.0-red?style=for-the-badge)
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-21_LTS-orange?style=for-the-badge&logo=openjdk" alt="Java 21" />
+  <img src="https://img.shields.io/badge/Spring_Boot-3.4.2-brightgreen?style=for-the-badge&logo=springboot" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/AI_Engine-DJL_PaddleOCR-blue?style=for-the-badge&logo=apache" alt="DJL PaddleOCR" />
+  <img src="https://img.shields.io/badge/QR_Scanner-ZXing_Pure_Java-yellow?style=for-the-badge" alt="ZXing QR" />
+  <img src="https://img.shields.io/badge/License-Apache_2.0-red?style=for-the-badge" alt="License" />
+</p>
+
+---
+
+## 📸 Interactive Dashboard & Scan Preview
+
+<p align="center">
+  <img src="docs/images/panlens-dashboard-preview.png" alt="PanLens Dashboard Preview" width="100%" />
+</p>
 
 ---
 
