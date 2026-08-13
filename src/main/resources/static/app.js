@@ -2,50 +2,28 @@
 let currentBase64 = '';
 let currentImageDimensions = { width: 0, height: 0 };
 let currentActiveTab = 'upload';
-let mockMode = true; // Auto-falls back to simulation if backend API is offline
 
-// Pre-generated Presets (including user's real card sample)
+// Pre-generated Generic Presets (No personal data)
 const PRESETS = {
-  user_real: {
-    name: "Shubham Bhati's Real PAN Card",
-    base64: "data:image/jpeg;base64,real_user_pan_image",
-    width: 1024,
-    height: 724,
-    panNumber: "EPHPB6646R",
-    name: "SHUBHAM BHATI",
-    fatherName: "RAJESH BHATI",
-    dob: "11092000",
-    source: "QR",
-    confidence: {
-      panNumber: 0.998,
-      name: 0.986,
-      fatherName: 0.979,
-      dob: 0.992
-    },
-    qualityMetrics: {
-      qualityPercentage: 98.4,
-      blurScore: "Laplacian Var 614.8 (Crisp Focus)",
-      exposureScore: "Optimal Exposure Histogram",
-      resolution: "1024x724px"
-    },
-    correctionMetrics: {
-      correctionPercentage: 100.0,
-      swapsApplied: [
-        "4th char 'P' Individual status verified",
-        "5th char 'B' matches surname first letter (BHATI)",
-        "Regex format [A-Z]{5}[0-9]{4}[A-Z] 100% compliant"
-      ]
-    }
-  },
   valid_new: {
     name: "Valid PAN (Post-2018)",
-    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%231e293b' rx='16'/><rect x='20' y='20' width='760' height='460' fill='%230f172a' stroke='%2338bdf8' stroke-width='3' rx='12'/><text x='400' y='60' text-anchor='middle' fill='%2338bdf8' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT - GOVT OF INDIA</text><text x='400' y='90' text-anchor='middle' fill='%2394a3b8' font-size='16' font-family='sans-serif'>PERMANENT ACCOUNT NUMBER CARD</text><circle cx='100' cy='180' r='50' fill='%23334155'/><text x='180' y='160' fill='%2364748b' font-size='14' font-family='sans-serif'>Name / Name</text><text x='180' y='190' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>SHUBHAM BHATI</text><text x='180' y='240' fill='%2364748b' font-size='14' font-family='sans-serif'>Father&apos;s Name</text><text x='180' y='270' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>RAJESH BHATI</text><text x='180' y='320' fill='%2364748b' font-size='14' font-family='sans-serif'>Date of Birth</text><text x='180' y='350' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>11/09/2000</text><text x='180' y='410' fill='%2338bdf8' font-size='32' font-weight='bold' font-family='monospace'>EPHPB6646R</text><rect x='620' y='300' width='120' height='120' fill='%23ffffff'/><path d='M630 310h30v30h-30zM680 310h30v30h-30zM630 360h30v30h-30zM670 350h40v40h-40z' fill='%23000000'/></svg>",
+    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%231e293b' rx='16'/><rect x='20' y='20' width='760' height='460' fill='%230f172a' stroke='%2338bdf8' stroke-width='3' rx='12'/><text x='400' y='60' text-anchor='middle' fill='%2338bdf8' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT - GOVT OF INDIA</text><text x='400' y='90' text-anchor='middle' fill='%2394a3b8' font-size='16' font-family='sans-serif'>PERMANENT ACCOUNT NUMBER CARD</text><circle cx='100' cy='180' r='50' fill='%23334155'/><text x='180' y='160' fill='%2364748b' font-size='14' font-family='sans-serif'>Name / Name</text><text x='180' y='190' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>ANAND KUMAR</text><text x='180' y='240' fill='%2364748b' font-size='14' font-family='sans-serif'>Father&apos;s Name</text><text x='180' y='270' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>SURESH KUMAR</text><text x='180' y='320' fill='%2364748b' font-size='14' font-family='sans-serif'>Date of Birth</text><text x='180' y='350' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>15/08/1995</text><text x='180' y='410' fill='%2338bdf8' font-size='32' font-weight='bold' font-family='monospace'>ABCDE1234F</text><rect x='620' y='300' width='120' height='120' fill='%23ffffff'/><path d='M630 310h30v30h-30zM680 310h30v30h-30zM630 360h30v30h-30zM670 350h40v40h-40z' fill='%23000000'/></svg>",
     width: 800,
     height: 500,
-    panNumber: "EPHPB6646R",
-    name: "SHUBHAM BHATI",
-    fatherName: "RAJESH BHATI",
-    dob: "11092000"
+    panNumber: "ABCDE1234F",
+    name: "ANAND KUMAR",
+    fatherName: "SURESH KUMAR",
+    dob: "15081995"
+  },
+  valid_old: {
+    name: "Valid PAN (Pre-2018)",
+    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%23182232' rx='16'/><text x='400' y='60' text-anchor='middle' fill='%2360a5fa' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT</text><text x='100' y='150' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>ANAND KUMAR</text><text x='100' y='220' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>SURESH KUMAR</text><text x='100' y='290' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>15/08/1995</text><text x='100' y='370' fill='%2360a5fa' font-size='32' font-weight='bold' font-family='monospace'>ABCDE1234F</text></svg>",
+    width: 800,
+    height: 500,
+    panNumber: "ABCDE1234F",
+    name: "ANAND KUMAR",
+    fatherName: "SURESH KUMAR",
+    dob: "15081995"
   },
   blurry: {
     name: "Blurry Image Card",
@@ -158,14 +136,7 @@ function loadPreset(presetKey) {
   currentImageDimensions = { width: preset.width, height: preset.height };
   document.getElementById('base64Input').value = preset.base64;
   document.getElementById('charCount').textContent = `${preset.base64.length.toLocaleString()} characters`;
-  
-  // Set custom SVG preview representation for real user card
-  if (presetKey === 'user_real') {
-    const svgPreview = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%230284c7' rx='16'/><rect x='15' y='15' width='770' height='470' fill='%23e0f2fe' rx='12'/><text x='240' y='60' fill='%230369a1' font-size='22' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT</text><text x='580' y='60' fill='%230369a1' font-size='22' font-weight='bold' font-family='sans-serif'>GOVT. OF INDIA</text><circle cx='90' cy='220' r='55' fill='%230284c7'/><text x='160' y='180' fill='%2364748b' font-size='13' font-family='sans-serif'>Name / Name</text><text x='160' y='210' fill='%230f172a' font-size='24' font-weight='bold' font-family='sans-serif'>SHUBHAM BHATI</text><text x='160' y='255' fill='%2364748b' font-size='13' font-family='sans-serif'>Father&apos;s Name</text><text x='160' y='285' fill='%230f172a' font-size='22' font-weight='bold' font-family='sans-serif'>RAJESH BHATI</text><text x='160' y='330' fill='%2364748b' font-size='13' font-family='sans-serif'>Date of Birth</text><text x='160' y='360' fill='%230f172a' font-size='22' font-weight='bold' font-family='sans-serif'>11/09/2000</text><text x='280' y='425' fill='%230369a1' font-size='36' font-weight='bold' font-family='monospace'>EPHPB6646R</text><rect x='580' y='160' width='170' height='170' fill='%23ffffff' stroke='%230284c7' stroke-width='2'/><path d='M590 170h40v40h-40zM650 170h40v40h-40zM590 230h40v40h-40zM640 220h50v50h-50z' fill='%230f172a'/></svg>";
-    updatePreview(svgPreview);
-  } else {
-    updatePreview(preset.base64);
-  }
+  updatePreview(preset.base64);
 }
 
 // Update Image Preview
@@ -254,32 +225,32 @@ function simulatePipelineExecution(payload) {
     return;
   }
 
-  // Real User Card Extraction Result (EPHPB6646R)
+  // Generic Sample Extraction Result (No personal data)
   const mockResult = {
     success: true,
-    source: "QR",
-    panNumber: "EPHPB6646R",
-    name: "SHUBHAM BHATI",
-    fatherName: "RAJESH BHATI",
-    dob: "11092000",
+    source: currentBase64.includes('Post-2018') ? "QR" : "OCR",
+    panNumber: "ABCDE1234F",
+    name: "ANAND KUMAR",
+    fatherName: "SURESH KUMAR",
+    dob: "15081995",
     confidence: {
-      panNumber: 0.998,
-      name: 0.986,
-      fatherName: 0.979,
-      dob: 0.992
+      panNumber: 0.994,
+      name: 0.952,
+      fatherName: 0.938,
+      dob: 0.981
     },
     qualityMetrics: {
-      qualityPercentage: 98.4,
-      blurScore: "Laplacian Var 614.8 (Passed)",
+      qualityPercentage: 96.5,
+      blurScore: "Laplacian Var 482.4 (Passed)",
       exposureScore: "Histogram Balanced",
-      resolution: `${currentImageDimensions.width || 1024}x${currentImageDimensions.height || 724}px`
+      resolution: `${currentImageDimensions.width || 800}x${currentImageDimensions.height || 500}px`
     },
     correctionMetrics: {
       correctionPercentage: 100.0,
       swapsApplied: [
-        "4th char 'P' Individual verified",
-        "5th char 'B' matches surname first letter (BHATI)",
-        "Positional Regex [A-Z]{5}[0-9]{4}[A-Z] 100% verified"
+        "Fixed letter 'O' -> digit '0' at index 9",
+        "4th char 'P' Individual flag verified",
+        "Surname first letter 'K' verified"
       ]
     }
   };
@@ -299,7 +270,7 @@ function renderOcrResult(result, reqPayload) {
   }
 
   // Compute Percentages requested by User
-  const qualityPct = result.qualityMetrics ? result.qualityMetrics.qualityPercentage : 98.4;
+  const qualityPct = result.qualityMetrics ? result.qualityMetrics.qualityPercentage : 96.5;
   const fetchPct = ((result.confidence.panNumber * 0.4 + result.confidence.name * 0.3 + result.confidence.fatherName * 0.15 + result.confidence.dob * 0.15) * 100).toFixed(1);
   const correctionPct = result.correctionMetrics ? result.correctionMetrics.correctionPercentage : 100.0;
 

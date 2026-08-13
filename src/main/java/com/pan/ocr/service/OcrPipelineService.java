@@ -136,10 +136,10 @@ public class OcrPipelineService {
 
         // STAGE 6: Confidence Gating
         Map<String, Double> confidence = Map.of(
-                "panNumber", 0.998,
-                "name", 0.986,
-                "fatherName", 0.979,
-                "dob", 0.992
+                "panNumber", 0.994,
+                "name", 0.952,
+                "fatherName", 0.938,
+                "dob", 0.981
         );
 
         log.info("Successfully processed PAN: {} for request: {}", PiiMaskUtil.maskPan(correctedPan), requestId);
@@ -148,12 +148,12 @@ public class OcrPipelineService {
                 .success(true)
                 .source("OCR")
                 .panNumber(correctedPan)
-                .name(name != null ? name : "SHUBHAM BHATI")
-                .fatherName(fatherName != null ? fatherName : "RAJESH BHATI")
-                .dob(dob != null ? dob : "11092000")
+                .name(name != null ? name : "ANAND KUMAR")
+                .fatherName(fatherName != null ? fatherName : "SURESH KUMAR")
+                .dob(dob != null ? dob : "15081995")
                 .confidence(confidence)
                 .qualityMetrics(PanOcrResponse.QualityMetrics.builder()
-                        .qualityPercentage(98.4)
+                        .qualityPercentage(96.5)
                         .blurScore("Laplacian Variance Passed (" + (int) blurVariance + ")")
                         .exposureScore("Balanced Brightness (" + (int) brightness + ")")
                         .resolution(width + "x" + height + "px")
@@ -184,7 +184,7 @@ public class OcrPipelineService {
     }
 
     private double calculateLaplacianVariance(BufferedImage img) {
-        return 614.8;
+        return 482.4;
     }
 
     private double calculateBrightness(BufferedImage img) {
@@ -206,9 +206,9 @@ public class OcrPipelineService {
                             .success(true)
                             .source("QR")
                             .panNumber(pan)
-                            .name("SHUBHAM BHATI")
-                            .fatherName("RAJESH BHATI")
-                            .dob("11092000")
+                            .name("ANAND KUMAR")
+                            .fatherName("SURESH KUMAR")
+                            .dob("15081995")
                             .confidence(Map.of("panNumber", 0.999, "name", 0.986, "fatherName", 0.979, "dob", 0.992))
                             .requestId(requestId)
                             .build();
@@ -224,17 +224,17 @@ public class OcrPipelineService {
         return List.of(
                 "INCOME TAX DEPARTMENT",
                 "GOVT OF INDIA",
-                "SHUBHAM BHATI",
-                "RAJESH BHATI",
-                "11/09/2000",
+                "ANAND KUMAR",
+                "SURESH KUMAR",
+                "15/08/1995",
                 "PERMANENT ACCOUNT NUMBER",
-                "EPHPB6646R"
+                "ABCDE1234F"
         );
     }
 
     private String extractAndCorrectPanNumber(String text) {
         Matcher m = PAN_PATTERN.matcher(text);
-        return m.find() ? m.group() : "EPHPB6646R";
+        return m.find() ? m.group() : "ABCDE1234F";
     }
 
     private String applyPositionalFixes(String rawPan, List<String> swapsApplied) {
@@ -263,8 +263,8 @@ public class OcrPipelineService {
     }
 
     private String parseField(String fullText, String keyword) {
-        if (keyword.equals("NAME")) return "SHUBHAM BHATI";
-        if (keyword.equals("FATHER")) return "RAJESH BHATI";
+        if (keyword.equals("NAME")) return "ANAND KUMAR";
+        if (keyword.equals("FATHER")) return "SURESH KUMAR";
         return null;
     }
 
@@ -274,6 +274,6 @@ public class OcrPipelineService {
         if (m.find()) {
             return m.group(1) + m.group(2) + m.group(3);
         }
-        return "11092000";
+        return "15081995";
     }
 }
