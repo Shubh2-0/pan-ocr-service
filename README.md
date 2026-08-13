@@ -81,7 +81,7 @@ PanLens OCR processes the photo in under 2 seconds and returns this simple struc
 {
   "success": true,
   "source": "QR",
-  "panNumber": "ABCDE1234F",
+  "panNumber": "ABCPE1234F",
   "name": "ANAND KUMAR",
   "fatherName": "SURESH KUMAR",
   "dob": "15/08/1995",
