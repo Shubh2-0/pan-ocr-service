@@ -8,20 +8,20 @@ let mediaStream = null;
 const PRESETS = {
   valid_new: {
     name: "Valid PAN (Post-2018)",
-    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%231e293b' rx='16'/><rect x='20' y='20' width='760' height='460' fill='%230f172a' stroke='%2338bdf8' stroke-width='3' rx='12'/><text x='400' y='60' text-anchor='middle' fill='%2338bdf8' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT - GOVT OF INDIA</text><text x='400' y='90' text-anchor='middle' fill='%2394a3b8' font-size='16' font-family='sans-serif'>PERMANENT ACCOUNT NUMBER CARD</text><circle cx='100' cy='180' r='50' fill='%23334155'/><text x='180' y='160' fill='%2364748b' font-size='14' font-family='sans-serif'>Name / Name</text><text x='180' y='190' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>ANAND KUMAR</text><text x='180' y='240' fill='%2364748b' font-size='14' font-family='sans-serif'>Father&apos;s Name</text><text x='180' y='270' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>SURESH KUMAR</text><text x='180' y='320' fill='%2364748b' font-size='14' font-family='sans-serif'>Date of Birth</text><text x='180' y='350' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>15/08/1995</text><text x='180' y='410' fill='%2338bdf8' font-size='32' font-weight='bold' font-family='monospace'>ABCDE1234F</text><rect x='620' y='300' width='120' height='120' fill='%23ffffff'/><path d='M630 310h30v30h-30zM680 310h30v30h-30zM630 360h30v30h-30zM670 350h40v40h-40z' fill='%23000000'/></svg>",
+    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%231e293b' rx='16'/><rect x='20' y='20' width='760' height='460' fill='%230f172a' stroke='%2338bdf8' stroke-width='3' rx='12'/><text x='400' y='60' text-anchor='middle' fill='%2338bdf8' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT - GOVT OF INDIA</text><text x='400' y='90' text-anchor='middle' fill='%2394a3b8' font-size='16' font-family='sans-serif'>PERMANENT ACCOUNT NUMBER CARD</text><circle cx='100' cy='180' r='50' fill='%23334155'/><text x='180' y='160' fill='%2364748b' font-size='14' font-family='sans-serif'>Name / Name</text><text x='180' y='190' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>ANAND KUMAR</text><text x='180' y='240' fill='%2364748b' font-size='14' font-family='sans-serif'>Father&apos;s Name</text><text x='180' y='270' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>SURESH KUMAR</text><text x='180' y='320' fill='%2364748b' font-size='14' font-family='sans-serif'>Date of Birth</text><text x='180' y='350' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>15/08/1995</text><text x='180' y='410' fill='%2338bdf8' font-size='32' font-weight='bold' font-family='monospace'>ABCPE1234F</text><rect x='620' y='300' width='120' height='120' fill='%23ffffff'/><path d='M630 310h30v30h-30zM680 310h30v30h-30zM630 360h30v30h-30zM670 350h40v40h-40z' fill='%23000000'/></svg>",
     width: 800,
     height: 500,
-    panNumber: "ABCDE1234F",
+    panNumber: "ABCPE1234F",
     name: "ANAND KUMAR",
     fatherName: "SURESH KUMAR",
     dob: "15081995"
   },
   valid_old: {
     name: "Valid PAN (Pre-2018)",
-    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%23182232' rx='16'/><text x='400' y='60' text-anchor='middle' fill='%2360a5fa' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT</text><text x='100' y='150' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>ANAND KUMAR</text><text x='100' y='220' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>SURESH KUMAR</text><text x='100' y='290' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>15/08/1995</text><text x='100' y='370' fill='%2360a5fa' font-size='32' font-weight='bold' font-family='monospace'>ABCDE1234F</text></svg>",
+    base64: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='100%' height='100%' fill='%23182232' rx='16'/><text x='400' y='60' text-anchor='middle' fill='%2360a5fa' font-size='24' font-weight='bold' font-family='sans-serif'>INCOME TAX DEPARTMENT</text><text x='100' y='150' fill='%23ffffff' font-size='22' font-weight='bold' font-family='sans-serif'>ANAND KUMAR</text><text x='100' y='220' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>SURESH KUMAR</text><text x='100' y='290' fill='%23ffffff' font-size='20' font-weight='bold' font-family='sans-serif'>15/08/1995</text><text x='100' y='370' fill='%2360a5fa' font-size='32' font-weight='bold' font-family='monospace'>ABCPE1234F</text></svg>",
     width: 800,
     height: 500,
-    panNumber: "ABCDE1234F",
+    panNumber: "ABCPE1234F",
     name: "ANAND KUMAR",
     fatherName: "SURESH KUMAR",
     dob: "15081995"
@@ -304,7 +304,7 @@ function simulatePipelineExecution(payload) {
   const mockResult = {
     success: true,
     source: currentBase64.includes('Post-2018') ? "QR" : "OCR",
-    panNumber: "ABCDE1234F",
+    panNumber: "ABCPE1234F",
     name: "ANAND KUMAR",
     fatherName: "SURESH KUMAR",
     dob: "15081995",

@@ -231,13 +231,13 @@ public class OcrPipelineService {
                 "SURESH KUMAR",
                 "15/08/1995",
                 "PERMANENT ACCOUNT NUMBER",
-                "ABCDE1234F"
+                "ABCPE1234F"
         );
     }
 
     private String extractAndCorrectPanNumber(String text) {
         Matcher m = PAN_PATTERN.matcher(text);
-        return m.find() ? m.group() : "ABCDE1234F";
+        return m.find() ? m.group() : "ABCPE1234F";
     }
 
     private String applyPositionalFixes(String rawPan, List<String> swapsApplied) {
