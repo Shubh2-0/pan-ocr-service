@@ -1,4 +1,4 @@
-# 💳 PAN Card OCR & Data Extraction Service
+# 💳 PanLens OCR - In-House Data Extraction Engine
 
 An in-house, intelligent microservice that reads customer-uploaded PAN card photos, scans QR codes or extracts text automatically and returns clean structured data (PAN Number, Full Name, Father's Name and DOB) with instant quality & accuracy scores.
 
@@ -12,7 +12,7 @@ An in-house, intelligent microservice that reads customer-uploaded PAN card phot
 
 ## 🌟 How It Works (In Simple Words)
 
-When a customer uploads their PAN card during onboarding, our service processes the image through four easy steps:
+When a customer uploads their PAN card during onboarding, PanLens OCR processes the image through four easy steps:
 
 ```mermaid
 flowchart LR
@@ -46,8 +46,8 @@ flowchart LR
     end
 ```
 
-1. **Flexible Input**: You can upload a photo from your computer, take a live picture using your camera or paste a base64 image string.
-2. **Instant Quality Screening**: Before running AI models, the service checks if the photo is blurry, dark or cut off. If a user accidentally uploads an Aadhaar card instead of a PAN card, it lets them know immediately.
+1. **3 Input Options**: You can upload a photo from your computer, take a live picture using your camera or paste a base64 image string.
+2. **Instant Quality Screening**: Before running AI models, PanLens OCR checks if the photo is blurry, dark or cut off. If a user accidentally uploads an Aadhaar card instead of a PAN card, it lets them know immediately.
 3. **Smart Extraction**: Reads the QR code on 2018+ cards instantly. If no QR code is found, the DJL PaddleOCR AI model reads the text lines and fixes common OCR letter/number confusions (like fixing letter `O` into number `0` in digit positions).
 4. **Detailed Metrics Output**: Delivers verified fields along with **Image Quality %**, **Fetch Extraction %** and **Correction Accuracy %**.
 
@@ -61,7 +61,7 @@ Imagine a customer opening a digital wallet or bank account on their smartphone.
 The customer snaps a picture of their PAN card on their mobile browser using our live camera option.
 
 ### 2. Backend Extraction Response
-Our service processes the photo in under 2 seconds and returns this simple structured response:
+PanLens OCR processes the photo in under 2 seconds and returns this simple structured response:
 
 ```json
 {
