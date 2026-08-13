@@ -2,6 +2,7 @@
 let currentBase64 = '';
 let currentImageDimensions = { width: 0, height: 0 };
 let currentActiveTab = 'upload';
+let mediaStream = null;
 
 // Pre-generated Generic Presets (No personal data)
 const PRESETS = {
@@ -39,13 +40,79 @@ const PRESETS = {
   }
 };
 
-// Tab Switcher
+// Tab Switcher (Upload File vs Camera vs Base64)
 function switchTab(tab) {
   currentActiveTab = tab;
   document.getElementById('tabUpload').classList.toggle('active', tab === 'upload');
+  document.getElementById('tabCamera').classList.toggle('active', tab === 'camera');
   document.getElementById('tabBase64').classList.toggle('active', tab === 'base64');
+
   document.getElementById('uploadView').style.display = tab === 'upload' ? 'block' : 'none';
+  document.getElementById('cameraView').style.display = tab === 'camera' ? 'block' : 'none';
   document.getElementById('base64View').style.display = tab === 'base64' ? 'block' : 'none';
+
+  if (tab !== 'camera') {
+    stopCamera();
+  }
+}
+
+// Camera Capture Stream Logic
+async function startCamera() {
+  const video = document.getElementById('webcamVideo');
+  const captureBtn = document.getElementById('captureBtn');
+  const stopBtn = document.getElementById('stopCameraBtn');
+  const startBtn = document.getElementById('startCameraBtn');
+
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    video.srcObject = mediaStream;
+    captureBtn.disabled = false;
+    stopBtn.style.display = 'inline-flex';
+    startBtn.style.display = 'none';
+  } catch (err) {
+    alert("Camera permission denied or camera device not found: " + err.message);
+  }
+}
+
+function stopCamera() {
+  if (mediaStream) {
+    mediaStream.getTracks().forEach(track => track.stop());
+    mediaStream = null;
+  }
+  const video = document.getElementById('webcamVideo');
+  if (video) video.srcObject = null;
+
+  const captureBtn = document.getElementById('captureBtn');
+  const stopBtn = document.getElementById('stopCameraBtn');
+  const startBtn = document.getElementById('startCameraBtn');
+
+  if (captureBtn) captureBtn.disabled = true;
+  if (stopBtn) stopBtn.style.display = 'none';
+  if (startBtn) startBtn.style.display = 'inline-flex';
+}
+
+function capturePhoto() {
+  const video = document.getElementById('webcamVideo');
+  const canvas = document.getElementById('cameraCanvas');
+
+  if (!video || !video.videoWidth) {
+    alert("Camera feed not ready.");
+    return;
+  }
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const capturedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+  currentBase64 = capturedBase64;
+  currentImageDimensions = { width: canvas.width, height: canvas.height };
+
+  updatePreview(capturedBase64);
+  stopCamera();
 }
 
 // File Drag & Drop Handlers
@@ -156,7 +223,7 @@ function resetResultsDisplay() {
 // Main OCR Execution Function
 async function runOcrExtraction() {
   if (!currentBase64) {
-    alert("Please select an image file or paste a base64 string first!");
+    alert("Please select an image file, capture via camera, or paste a base64 string first!");
     return;
   }
 

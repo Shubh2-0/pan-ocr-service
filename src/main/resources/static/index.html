@@ -40,10 +40,13 @@
           PAN Document Input
         </h2>
 
-        <!-- Tab Selector: File Upload vs Base64 -->
+        <!-- Tab Selector: File Upload vs Camera vs Base64 -->
         <div class="tabs">
           <button class="tab-btn active" id="tabUpload" onclick="switchTab('upload')">
             <i class="fa-solid fa-image"></i> Upload File
+          </button>
+          <button class="tab-btn" id="tabCamera" onclick="switchTab('camera')">
+            <i class="fa-solid fa-camera"></i> Camera Capture
           </button>
           <button class="tab-btn" id="tabBase64" onclick="switchTab('base64')">
             <i class="fa-solid fa-code"></i> Paste Base64
@@ -62,7 +65,26 @@
           </div>
         </div>
 
-        <!-- Tab 2: Base64 Textarea Area -->
+        <!-- Tab 2: Live Camera Capture Stream -->
+        <div id="cameraView" style="display: none;">
+          <div style="text-align: center; position: relative; background: #000; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color);">
+            <video id="webcamVideo" autoplay playsinline style="width: 100%; max-height: 240px; object-fit: cover; display: block;"></video>
+            <canvas id="cameraCanvas" style="display: none;"></canvas>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 12px; justify-content: center;">
+            <button id="startCameraBtn" class="preset-chip" onclick="startCamera()">
+              <i class="fa-solid fa-video"></i> Start Camera
+            </button>
+            <button id="captureBtn" class="preset-chip" style="border-color: var(--primary-cyan); color: var(--primary-cyan);" onclick="capturePhoto()" disabled>
+              <i class="fa-solid fa-camera-retro"></i> Capture Photo
+            </button>
+            <button id="stopCameraBtn" class="preset-chip" style="display: none;" onclick="stopCamera()">
+              <i class="fa-solid fa-circle-stop"></i> Stop
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab 3: Base64 Textarea Area -->
         <div id="base64View" style="display: none;">
           <div class="base64-container">
             <textarea id="base64Input" class="base64-input" placeholder="Paste raw base64 string or data:image/jpeg;base64,... here..." oninput="handleBase64Input()"></textarea>
@@ -75,7 +97,7 @@
           </div>
         </div>
 
-        <!-- Preset Test Cards (Generic Samples Only) -->
+        <!-- Preset Test Cards -->
         <div class="preset-bar">
           <span class="preset-label"><i class="fa-solid fa-vial"></i> Quick Test Presets:</span>
           <button class="preset-chip" onclick="loadPreset('valid_new')">Valid PAN (Post-2018)</button>
