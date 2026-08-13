@@ -7,7 +7,7 @@ public class PiiMaskUtil {
     }
 
     /**
-     * Masks PAN number (e.g. EPHPB6646R -> EP***6646R)
+     * Masks PAN number (e.g. ABCDE1234F -> AB***1234F)
      */
     public static String maskPan(String pan) {
         if (pan == null || pan.length() < 10) {

@@ -5,6 +5,10 @@ High-performance in-house PAN Card OCR data extraction microservice built on Jav
 ---
 
 ## Key Features & Architecture
+- **3 Input Options on UI**:
+  1. **Upload File**: Drag & drop or browse PAN card image files (JPG, PNG, WebP).
+  2. **Camera Capture**: Live camera stream feed with photo snapshot button for mobile devices and desktop webcams.
+  3. **Paste Base64**: Direct base64 payload input with auto-formatting and character counter.
 - **6-Stage Extraction Pipeline**:
   1. **Cheap Input Validation & Preprocessing**: Base64 normalization, max 7MB payload size cap, min 600px width requirement, longest-side downscaling to 1600px, Laplacian variance blur detection and exposure histogram verification.
   2. **QR Fast Path**: Direct barcode decoding using `zxing` for 2018+ PAN cards with anti-tampering surface text cross-verification.
@@ -40,27 +44,27 @@ High-performance in-house PAN Card OCR data extraction microservice built on Jav
 {
   "success": true,
   "source": "QR",
-  "panNumber": "EPHPB6646R",
-  "name": "SHUBHAM BHATI",
-  "fatherName": "RAJESH BHATI",
-  "dob": "11092000",
+  "panNumber": "ABCDE1234F",
+  "name": "ANAND KUMAR",
+  "fatherName": "SURESH KUMAR",
+  "dob": "15081995",
   "confidence": {
-    "panNumber": 0.998,
-    "name": 0.986,
-    "fatherName": 0.979,
-    "dob": 0.992
+    "panNumber": 0.994,
+    "name": 0.952,
+    "fatherName": 0.938,
+    "dob": 0.981
   },
   "qualityMetrics": {
-    "qualityPercentage": 98.4,
-    "blurScore": "Laplacian Var 614.8 (Passed)",
+    "qualityPercentage": 96.5,
+    "blurScore": "Laplacian Var 482.4 (Passed)",
     "exposureScore": "Balanced Brightness",
-    "resolution": "1024x724px"
+    "resolution": "800x500px"
   },
   "correctionMetrics": {
     "correctionPercentage": 100.0,
     "swapsApplied": [
-      "4th char 'P' Individual verified",
-      "5th char 'B' matches surname first letter (BHATI)"
+      "Fixed letter 'O' -> digit '0' at index 9",
+      "4th char 'P' Individual flag verified"
     ]
   },
   "requestId": "req-9821abc"
