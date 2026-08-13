@@ -1,6 +1,6 @@
-# 💳 PanLens OCR - In-House Data Extraction Engine
+# 💳 PanLens OCR - Painless In-House PAN Card Data Extraction Engine
 
-An in-house, intelligent microservice that reads customer-uploaded PAN card photos, scans QR codes or extracts text automatically and returns clean structured data (PAN Number, Full Name, Father's Name and DOB) with instant quality & accuracy scores.
+An intelligent, high-performance in-house microservice that reads customer-uploaded PAN card photos, scans QR codes or extracts text automatically and returns clean structured data (PAN Number, Full Name, Father's Name and DOB) with instant quality & accuracy scores.
 
 ![Java 21](https://img.shields.io/badge/Java-21_LTS-orange?style=for-the-badge&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.2-brightgreen?style=for-the-badge&logo=springboot)
